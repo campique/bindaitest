@@ -35,13 +35,12 @@ function startGame(vsComputer) {
     });
     startMenu.classList.add('hidden');
     gameContainer.classList.remove('hidden');
+    board.classList.remove('hidden');
 }
 
 function handleCellClick(clickedCellEvent) {
     const clickedCell = clickedCellEvent.target;
-    const clickedCellIndex = parseInt(
-        clickedCell.getAttribute('data-cell-index')
-    );
+    const clickedCellIndex = parseInt(clickedCell.getAttribute('data-cell-index'));
 
     if (gameState[clickedCellIndex] !== '' || !gameActive) return;
 
@@ -68,11 +67,7 @@ function handleResultValidation() {
     let roundWon = false;
     for (let i = 0; i < winningConditions.length; i++) {
         const [a, b, c] = winningConditions[i];
-        if (
-            gameState[a] &&
-            gameState[a] === gameState[b] &&
-            gameState[a] === gameState[c]
-        ) {
+        if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
             roundWon = true;
             break;
         }
@@ -124,16 +119,9 @@ function findBestMove(board) {
 }
 
 function minimax(board, depth, isMaximizing) {
-    const scores = {
-        X: -1,
-        O: 1,
-        tie: 0
-    };
-
+    const scores = { X: -1, O: 1, tie: 0 };
     let result = checkWinner(board);
-    if (result !== null) {
-        return scores[result];
-    }
+    if (result !== null) return scores[result];
 
     if (isMaximizing) {
         let bestScore = -Infinity;
@@ -167,9 +155,7 @@ function checkWinner(board) {
             return board[a];
         }
     }
-    if (board.includes('')) {
-        return null;
-    }
+    if (board.includes('')) return null;
     return 'tie';
 }
 
@@ -178,6 +164,9 @@ cells.forEach((cell, index) => {
     cell.setAttribute('data-cell-index', index);
 });
 
-restartButton.addEventListener('click', () => startGame(againstComputer));
+restartButton.addEventListener('click', () => {
+    startMenu.classList.remove('hidden');
+    gameContainer.classList.add('hidden');
+});
 vsPlayerButton.addEventListener('click', () => startGame(false));
 vsComputerButton.addEventListener('click', () => startGame(true));
