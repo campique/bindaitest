@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boter, Kaas en Eieren</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Boter, Kaas en Eieren</h1>
+        <div class="game-mode">
+            <button id="vsPlayer">Tegen Speler</button>
+            <button id="vsComputer">Tegen Computer</button>
+        </div>
+        <div id="gameBoard" class="board">
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+        </div>
+        <div id="status" class="status"></div>
+        <button id="restartButton">Opnieuw Spelen</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
