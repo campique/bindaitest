@@ -1,5 +1,6 @@
 const cells = document.querySelectorAll('[data-cell]');
 const board = document.getElementById('gameBoard');
+const menu = document.getElementById('menu');
 const restartButton = document.getElementById('restartButton');
 const statusDisplay = document.getElementById('status');
 const vsPlayerButton = document.getElementById('vsPlayer');
@@ -31,7 +32,9 @@ function startGame(vsComputer) {
         cell.textContent = '';
         cell.classList.remove('x', 'o');
     });
-    board.style.pointerEvents = 'auto';
+    board.classList.remove('hidden');
+    menu.classList.add('hidden');
+    restartButton.classList.remove('hidden');
 }
 
 function handleCellClick(clickedCellEvent) {
@@ -78,7 +81,6 @@ function handleResultValidation() {
     if (roundWon) {
         statusDisplay.textContent = `Speler ${currentPlayer} wint!`;
         gameActive = false;
-        board.style.pointerEvents = 'none';
         confetti({
             particleCount: 100,
             spread: 70,
@@ -91,7 +93,6 @@ function handleResultValidation() {
     if (roundDraw) {
         statusDisplay.textContent = 'Gelijkspel!';
         gameActive = false;
-        board.style.pointerEvents = 'none';
         return;
     }
 
@@ -116,6 +117,3 @@ cells.forEach((cell, index) => {
 restartButton.addEventListener('click', () => startGame(againstComputer));
 vsPlayerButton.addEventListener('click', () => startGame(false));
 vsComputerButton.addEventListener('click', () => startGame(true));
-
-// Start het spel in de speler-tegen-speler modus
-startGame(false);
