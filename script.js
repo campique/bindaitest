@@ -1,6 +1,7 @@
+const startMenu = document.getElementById('startMenu');
+const gameContainer = document.getElementById('gameContainer');
 const cells = document.querySelectorAll('[data-cell]');
 const board = document.getElementById('gameBoard');
-const menu = document.getElementById('menu');
 const restartButton = document.getElementById('restartButton');
 const statusDisplay = document.getElementById('status');
 const vsPlayerButton = document.getElementById('vsPlayer');
@@ -32,9 +33,8 @@ function startGame(vsComputer) {
         cell.textContent = '';
         cell.classList.remove('x', 'o');
     });
-    board.classList.remove('hidden');
-    menu.classList.add('hidden');
-    restartButton.classList.remove('hidden');
+    startMenu.classList.add('hidden');
+    gameContainer.classList.remove('hidden');
 }
 
 function handleCellClick(clickedCellEvent) {
@@ -101,12 +101,76 @@ function handleResultValidation() {
 }
 
 function makeComputerMove() {
-    const emptyCells = gameState.reduce((acc, cell, index) => 
-        cell === '' ? acc.concat(index) : acc, []);
-    const randomIndex = Math.floor(Math.random() * emptyCells.length);
-    const computerMove = emptyCells[randomIndex];
-    const computerCell = cells[computerMove];
-    handleCellPlayed(computerCell, computerMove);
+    const bestMove = findBestMove(gameState);
+    const computerCell = cells[bestMove];
+    handleCellPlayed(computerCell, bestMove);
+}
+
+function findBestMove(board) {
+    let bestScore = -Infinity;
+    let bestMove;
+    for (let i = 0; i < 9; i++) {
+        if (board[i] === '') {
+            board[i] = 'O';
+            let score = minimax(board, 0, false);
+            board[i] = '';
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = i;
+            }
+        }
+    }
+    return bestMove;
+}
+
+function minimax(board, depth, isMaximizing) {
+    const scores = {
+        X: -1,
+        O: 1,
+        tie: 0
+    };
+
+    let result = checkWinner(board);
+    if (result !== null) {
+        return scores[result];
+    }
+
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < 9; i++) {
+            if (board[i] === '') {
+                board[i] = 'O';
+                let score = minimax(board, depth + 1, false);
+                board[i] = '';
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < 9; i++) {
+            if (board[i] === '') {
+                board[i] = 'X';
+                let score = minimax(board, depth + 1, true);
+                board[i] = '';
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
+    }
+}
+
+function checkWinner(board) {
+    for (let i = 0; i < winningConditions.length; i++) {
+        const [a, b, c] = winningConditions[i];
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            return board[a];
+        }
+    }
+    if (board.includes('')) {
+        return null;
+    }
+    return 'tie';
 }
 
 cells.forEach((cell, index) => {
